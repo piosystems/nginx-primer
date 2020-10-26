@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  web:
+    container_name: nginx-ism209-2019set
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    ports:
+      - 8080:80
+      - 443:443
+   
+  database:
+    container_name: postgres-ism209-2019set
+    image: postgres:latest
+    volumes:
+      - /Users/piusonobhayedo/data/postgres:/data/postgres
+    env_file:
+    - docker.env
+  
+  pgadmin:
+    links:
+      - database:postgres-ism209-2019set
+    container_name: pgadmin-ism209-2019set
+    image: dpage/pgadmin4:latest
+    ports:
+      - 8081:80
+    volumes:
+      - /Users/piusonobhayedo/data/pgadmin:/root/.pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@isms.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - database
